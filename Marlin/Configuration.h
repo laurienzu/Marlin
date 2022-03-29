@@ -1,4 +1,11 @@
+
+
 /**
+ *       e's Marlin build for TwoTrees Sapphire Plus with stock hardware
+ * Every changed settings could be find by searching for       e
+ * 
+ * Last changes 2020-01-16 11:00
+ *
  * Marlin 3D Printer Firmware
  * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -20,6 +27,96 @@
  *
  */
 #pragma once
+
+//*************************************************************************************
+
+/** CHOOSE YOUR SAPPHIRE PLUS CONFIG:
+ * 1: X tmc2208, Y tmc2208, E a4988, single Z a4988, 1 endstop
+ * 2: X tmc2208, Y tmx2208, E a4988, dual Z tmc2208, 2 endstops
+ * 3: X tmc2208, Y tmx2208, E tmc2208, single Z tmc2208, 1 endstop
+ * 4: X tmc2208, Y tmx2208, E tmc2208, dual Z tmc2208, 1 endstop
+ * 44 X tmc2225, Y tmc2225, E tmc2225, dual Z tmc2225, 1 endstop
+ * 5: X tmc2208, Y tmx2208, E tmc2208, dual Z tmc2208, 2 endstops
+ * 6: X tmc2208, Y tmx2208, E tmc2208, dual Z a4988, 2 endstops
+ * 7: X tmc2209, Y tmx2209, E tmc2209, dual Z tmc2225, 2 endstops
+ * 8: X tmc2209, Y tmx2209, E tmc2209, dual Z tmc2209, 1 endstop
+ 
+ */
+
+#define SapphirePlusVariant 44 //
+
+//#define ITA_LANG  //italiano se abilitato , altrimenti inglese
+
+//#define HE1ASHE0 // per chi brucia mosfet hotend, montiamo sull'altro emulando HE0!!!
+
+#define SAPPHIRE_PLUS
+
+#if DISABLED (SAPPHIRE_PLUS)
+  #define SAPPHIRE_PRO  //enable to build for SAPPHIRE PRO INSTEAD OF PLUS
+#endif
+
+#define Rotated_Screen //to rotate screen of 180 degrees if all shown upset! on TFT
+
+
+#define MOTHERBOARD BOARD_MKS_ROBIN_NANO   //BOARD_MKS_ROBIN_NANO_V1_3_F4  //     SCHEDA HSRDWARE, potrebbe essere: BOARD_MKS_ROBIN_NANO_V2 per le ultime PLUS....
+//#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V1_3_F4
+
+//#define SAPPHIRE_PLUS_MKS_UI              // UI Grafica classica di TwoTrees
+
+#define GRIDMAX_POINTS 5  //3,5,7,8,9..... points to test with mesh or bltouch, 5= 5x5, so 25 probe points
+
+#define SAPPHIRE_PLUS_BLTOUCH             // Sensore di livellamento su Z endstop
+
+#if ENABLED (SAPPHIRE_PLUS_BLTOUCH)
+  #define probe_x 0.0    //probe point of X respect to bltouch mount
+  #define probe_y 29.5   //probe point of Y respect to bltouch mount
+  #define probe_z 0.0    //probe point of Z respect to bltouch mount, usually 0
+#endif
+
+//#define SAPPHIRE_PLUS_AUTOFAN             // accende e spegne ventola sopra i 50 gradi (SU "Hot-End-1 pinout" PIN: PB0 )
+                                          // altrimenti le ventole estrusore vanno bene sove sono (12/24v output)
+                                          
+//#define SAPPHIRE_PLUS_DIRECTDRIVE         // Estrusore in Direct Mode (no browden)
+
+//#define SAPPHIRE_PLUS_TMC_UART            // SU PIN PB10 (X,Y,Z,Z2) e PB9 (E0)
+#if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+  //#define SAPPHIRE_PLUS_TMC_UART_DIRECT   // PIN Singolo per ogni DRIVER
+  
+  /**
+     X_SERIAL_TX_PIN                   PA9    
+     X_SERIAL_RX_PIN                   PA9
+     Y_SERIAL_TX_PIN                   PA10   
+     Y_SERIAL_RX_PIN                   PA10
+     Z_SERIAL_TX_PIN                   PC13  
+     Z_SERIAL_RX_PIN                   PC13
+     Z2_SERIAL_TX_PIN                  PC7    
+     Z2_SERIAL_RX_PIN                  PC7    
+     E0_SERIAL_TX_PIN                  PE5    
+     E0_SERIAL_RX_PIN                  PE5
+   * 
+   */
+#else
+  //#define SAPPHIRE_PLUS_HAS_WIFI          // ESP8266 per WIFI
+#endif
+
+#define SAPPHIRE_PLUS_RUNOUT                // Sensore di filamento terminato
+#if ENABLED (SAPPHIRE_PLUS_RUNOUT)
+  //#define SAPPHIRE_PLUS_SMART_RUNOUT       // sensore di inceppamentoi filamento e filamento terminato
+#endif
+
+//#define SAPPHIRE_PLUS_NEOPIXEL             // su PIN PC7  (Striscia led indirizzabile RGB)
+//#define SAPPHIRE_PLUS_POWERLOSSRECOVERY   // su PIN PA2  /(Sistema di spegnimento su mncanza corrente elettrica e UPS)
+
+#define CUSTOM_MACHINE_NAME "TT SP-5" // nome da mostrare sullo schermo della stampante
+
+ 
+#define STRING_CONFIG_H_AUTHOR "(MKS Robin Nano 1.X)" // Who made the changes.
+
+
+ 
+
+//***************************************************************************
+
 
 /**
  * Configuration.h
@@ -69,7 +166,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "(none, default config)" // Who made the changes.
+//#define STRING_CONFIG_H_AUTHOR "(MKS Robin Nano V1.2)" // Who made the changes.
 //#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 /**
@@ -92,12 +189,10 @@
 // Show the bitmap in Marlin/_Statusscreen.h on the status screen.
 //#define CUSTOM_STATUS_SCREEN_IMAGE
 
-// @section machine
-
-// Choose the name from boards.h that matches your setup
-#ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+#if DISABLED (SAPPHIRE_PLUS_MKS_UI)
+  #define COLOR_BACKGROUND 0x0000 //LCD background color
 #endif
+// @section machine
 
 /**
  * Select the serial port on the board to use for communication with the host.
@@ -107,12 +202,13 @@
  *
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
-#define SERIAL_PORT 0
+#define SERIAL_PORT 3
 
 /**
  * Serial Port Baud Rate
  * This is the default communication speed for all serial ports.
  * Set the baud rate defaults for additional serial ports below.
+//#define SERIAL_PORT_2 1 // WiFi ///////////////////////////////////////
  *
  * 250000 works in most cases, but you might try a lower speed if
  * you commonly experience drop-outs during host printing.
@@ -128,8 +224,10 @@
  * Currently Ethernet (-2) is only supported on Teensy 4.1 boards.
  * :[-2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
-//#define SERIAL_PORT_2 -1
-//#define BAUDRATE_2 250000   // Enable to override BAUDRATE
+#if DISABLED(SAPPHIRE_PLUS_TMC_UART)
+  #define SERIAL_PORT_2 1
+  #define BAUDRATE_2 250000   // Enable to override BAUDRATE 115200
+#endif
 
 /**
  * Select a third serial port on the board to use for communication with the host.
@@ -142,8 +240,13 @@
 // Enable the Bluetooth serial interface on AT90USB devices
 //#define BLUETOOTH
 
+// Choose the name from boards.h that matches your setup
+#ifndef MOTHERBOARD
+  #define MOTHERBOARD BOARD_MKS_ROBIN_NANO
+#endif
+
 // Name displayed in the LCD "Ready" message and Info menu
-//#define CUSTOM_MACHINE_NAME "3D Printer"
+//#define CUSTOM_MACHINE_NAME "TT SP-5 V1.2"
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like https://www.uuidgenerator.net/version4
@@ -494,12 +597,12 @@
 #define TEMP_SENSOR_5 0
 #define TEMP_SENSOR_6 0
 #define TEMP_SENSOR_7 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_BED 1
 #define TEMP_SENSOR_PROBE 0
 #define TEMP_SENSOR_CHAMBER 0
 #define TEMP_SENSOR_COOLER 0
 #define TEMP_SENSOR_BOARD 0
-#define TEMP_SENSOR_REDUNDANT 0
+#define TEMP_SENSOR_REDUNDANT 0 ///////////////////////////// era 0
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
 #define DUMMY_THERMISTOR_998_VALUE  25
@@ -511,6 +614,7 @@
 //#define MAX31865_SENSOR_OHMS_1      100
 //#define MAX31865_CALIBRATION_OHMS_1 430
 
+//#define MAX_REDUNDANT_TEMP_SENSOR_DIFF 10 ///////////////// obsoleto= TEMP_SENSOR_REDUNDANT_MAX_DIFF
 #define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
 #define TEMP_WINDOW                  1  // (°C) Temperature proximity for the "temperature reached" timer
 #define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
@@ -588,21 +692,21 @@
 #define PID_K1 0.95      // Smoothing factor within any PID loop
 
 #if ENABLED(PIDTEMP)
-  //#define PID_EDIT_MENU         // Add PID editing to the "Advanced Settings" menu. (~700 bytes of PROGMEM)
-  //#define PID_AUTOTUNE_MENU     // Add PID auto-tuning to the "Advanced Settings" menu. (~250 bytes of PROGMEM)
+  #define PID_EDIT_MENU         // Add PID editing to the "Advanced Settings" menu. (~700 bytes of PROGMEM)
+  #define PID_AUTOTUNE_MENU     // Add PID auto-tuning to the "Advanced Settings" menu. (~250 bytes of PROGMEM)
   //#define PID_PARAMS_PER_HOTEND // Uses separate PID parameters for each extruder (useful for mismatched extruders)
                                   // Set/get with gcode: M301 E[extruder number, 0-2]
 
   #if ENABLED(PID_PARAMS_PER_HOTEND)
-    // Specify up to one value per hotend here, according to your setup.
-    // If there are fewer values, the last one applies to the remaining hotends.
-    #define DEFAULT_Kp_LIST {  22.20,  22.20 }
-    #define DEFAULT_Ki_LIST {   1.08,   1.08 }
-    #define DEFAULT_Kd_LIST { 114.00, 114.00 }
+    // Specify between 1 and HOTENDS values per array.
+    // If fewer than EXTRUDER values are provided, the last element will be repeated.
+    #define DEFAULT_Kp_LIST { 12.02, 12.02 }
+    #define DEFAULT_Ki_LIST {  0.75,  0.75 }
+    #define DEFAULT_Kd_LIST { 49.50, 49.50 }
   #else
-    #define DEFAULT_Kp  22.20
-    #define DEFAULT_Ki   1.08
-    #define DEFAULT_Kd 114.00
+    #define DEFAULT_Kp 12.71 //      e
+    #define DEFAULT_Ki 0.83  //      e
+    #define DEFAULT_Kd 48.40 //      e
   #endif
 #endif // PIDTEMP
 
@@ -623,7 +727,7 @@
  * heater. If your configuration is significantly different than this and you don't understand
  * the issues involved, don't use bed PID until someone else verifies that your hardware works.
  */
-//#define PIDTEMPBED
+#define PIDTEMPBED
 
 //#define BED_LIMIT_SWITCHING
 
@@ -641,9 +745,9 @@
 
   // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define DEFAULT_bedKp 10.00
-  #define DEFAULT_bedKi .023
-  #define DEFAULT_bedKd 305.4
+  #define DEFAULT_bedKp 37.49  //      e
+  #define DEFAULT_bedKi 7.09   //      e
+  #define DEFAULT_bedKd 132.25 //      e
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -717,8 +821,11 @@
  * Note: For Bowden Extruders make this large enough to allow load/unload.
  */
 #define PREVENT_LENGTHY_EXTRUDE
-#define EXTRUDE_MAXLENGTH 200
-
+#if ENABLED (SAPPHIRE_PLUS_DIRECTDRIVE)
+  #define EXTRUDE_MAXLENGTH 300
+#else
+  #define EXTRUDE_MAXLENGTH 650 //      e
+#endif
 //===========================================================================
 //======================== Thermal Runaway Protection =======================
 //===========================================================================
@@ -749,7 +856,7 @@
 
 // Enable one of the options below for CoreXY, CoreXZ, or CoreYZ kinematics,
 // either in the usual order or reversed
-//#define COREXY
+#define COREXY
 //#define COREXZ
 //#define COREYZ
 //#define COREYX
@@ -774,39 +881,48 @@
 
 // @section homing
 
+#define HOME_Y_BEFORE_X //Avoiding colision with endstops
 // Specify here all the endstop connectors that are connected to any endstop or probe.
 // Almost all printers will be using one per axis. Probes will use one or more of the
 // extra connectors. Leave undefined any used for non-endstop and non-probe purposes.
 #define USE_XMIN_PLUG
-#define USE_YMIN_PLUG
-#define USE_ZMIN_PLUG
+//#define USE_YMIN_PLUG
+#define USE_ZMIN_PLUG     //Z1 Endstop (Left)
 //#define USE_IMIN_PLUG
 //#define USE_JMIN_PLUG
 //#define USE_KMIN_PLUG
 //#define USE_XMAX_PLUG
-//#define USE_YMAX_PLUG
-//#define USE_ZMAX_PLUG
+#define USE_YMAX_PLUG
+
+////////da verificare
+#if SapphirePlusVariant == 2 or SapphirePlusVariant == 5 or SapphirePlusVariant == 6 or SapphirePlusVariant == 7   //      e
+  #define USE_ZMAX_PLUG        //      e
+#endif     
+///#if DISABLED(SAPPHIRE_PLUS_BLTOUCH)
+///  #define USE_ZMAX_PLUG
+///#endif
 //#define USE_IMAX_PLUG
 //#define USE_JMAX_PLUG
 //#define USE_KMAX_PLUG
 
 // Enable pullup for all endstops to prevent a floating state
-#define ENDSTOPPULLUPS
+//#define ENDSTOPPULLUPS
 #if DISABLED(ENDSTOPPULLUPS)
   // Disable ENDSTOPPULLUPS to set pullups individually
-  //#define ENDSTOPPULLUP_XMIN
-  //#define ENDSTOPPULLUP_YMIN
-  //#define ENDSTOPPULLUP_ZMIN
-  //#define ENDSTOPPULLUP_IMIN
-  //#define ENDSTOPPULLUP_JMIN
-  //#define ENDSTOPPULLUP_KMIN
   //#define ENDSTOPPULLUP_XMAX
   //#define ENDSTOPPULLUP_YMAX
   //#define ENDSTOPPULLUP_ZMAX
   //#define ENDSTOPPULLUP_IMAX
   //#define ENDSTOPPULLUP_JMAX
   //#define ENDSTOPPULLUP_KMAX
+  //#define ENDSTOPPULLUP_XMIN
+  //#define ENDSTOPPULLUP_YMIN
+  //#define ENDSTOPPULLUP_ZMIN
+  //#define ENDSTOPPULLUP_IMIN
+  //#define ENDSTOPPULLUP_JMIN
+  //#define ENDSTOPPULLUP_KMIN
   //#define ENDSTOPPULLUP_ZMIN_PROBE
+  #define ENDSTOPPULLUP_ZMIN_PROBE
 #endif
 
 // Enable pulldown for all endstops to prevent a floating state
@@ -829,21 +945,25 @@
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
-#define X_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Y_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Z_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
+#if DISABLED(SAPPHIRE_PLUS_BLTOUCH)
+  #define SP_INVERTING true
+#else
+  #define SP_INVERTING false
+#endif
+#define X_MIN_ENDSTOP_INVERTING true //      e Set to true to invert the logic of the endstop.
+#define Y_MIN_ENDSTOP_INVERTING false// Set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_INVERTING SP_INVERTING ///// Set to true to invert the logic of the endstop.
 #define I_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define J_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define K_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define X_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Y_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Z_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
+#define Y_MAX_ENDSTOP_INVERTING true //      e Set to true to invert the logic of the endstop.
+#define Z_MAX_ENDSTOP_INVERTING SP_INVERTING // Set to true to invert the logic of the endstop.
 #define I_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define J_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
 #define K_MAX_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
-#define Z_MIN_PROBE_ENDSTOP_INVERTING false // Set to true to invert the logic of the probe.
-
-/**
+#define Z_MIN_PROBE_ENDSTOP_INVERTING SP_INVERTING // Set to true to invert the logic of the probe.
+ /**
  * Stepper Drivers
  *
  * These settings allow Marlin to tune stepper driver timing and enable advanced options for
@@ -861,29 +981,146 @@
  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'L6474', 'POWERSTEP01', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#define X_DRIVER_TYPE  A4988
-#define Y_DRIVER_TYPE  A4988
-#define Z_DRIVER_TYPE  A4988
-//#define X2_DRIVER_TYPE A4988
-//#define Y2_DRIVER_TYPE A4988
-//#define Z2_DRIVER_TYPE A4988
-//#define Z3_DRIVER_TYPE A4988
-//#define Z4_DRIVER_TYPE A4988
-//#define I_DRIVER_TYPE  A4988
-//#define J_DRIVER_TYPE  A4988
-//#define K_DRIVER_TYPE  A4988
-#define E0_DRIVER_TYPE A4988
-//#define E1_DRIVER_TYPE A4988
-//#define E2_DRIVER_TYPE A4988
-//#define E3_DRIVER_TYPE A4988
-//#define E4_DRIVER_TYPE A4988
-//#define E5_DRIVER_TYPE A4988
-//#define E6_DRIVER_TYPE A4988
-//#define E7_DRIVER_TYPE A4988
+
+ 
+#if SapphirePlusVariant == 8
+  #undef SapphirePlusVariant 
+  #define SapphirePlusVariant 4
+  #define ALL2209
+#endif
+
+#if SapphirePlusVariant == 7   //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define X_DRIVER_TYPE TMC2208 //      e
+  #else
+    #define X_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#else  //      e
+   #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define X_DRIVER_TYPE TMC2208 //      e
+  #else
+    #define X_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#endif //      e
+
+#if SapphirePlusVariant == 7   //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define Y_DRIVER_TYPE TMC2208 //      
+  #else
+    #define Y_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#else  //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define Y_DRIVER_TYPE TMC2208 //      
+  #else
+    #define Y_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#endif //      e
+#undef Y_DRIVER_TYPE  
+#if SapphirePlusVariant == 1 or SapphirePlusVariant == 6   //      e
+  #define Z_DRIVER_TYPE A4988  //      e
+#elif SapphirePlusVariant == 2 or SapphirePlusVariant == 3 or SapphirePlusVariant == 4 or SapphirePlusVariant == 44 or SapphirePlusVariant == 5  //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define  Z_DRIVER_TYPE TMC2208 //      
+    #define Z2_DRIVER_TYPE TMC2208 //_STANDALONE // TMC2208_STANDALONE //      e
+  #else
+    #define  Z_DRIVER_TYPE TMC2208_STANDALONE //      
+    #define Z2_DRIVER_TYPE TMC2208_STANDALONE // TMC2208_STANDALONE //      e
+  #endif
+ 
+#elif SapphirePlusVariant == 7  //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define z_DRIVER_TYPE TMC2208 //      
+  #else
+    #define z_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#endif //      e
+ 
+#if SapphirePlusVariant == 2 or SapphirePlusVariant == 5   //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define Z2_DRIVER_TYPE TMC2208 //      
+  #else
+    #define Z2_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#elif SapphirePlusVariant == 6 //      e
+  #define Z2_DRIVER_TYPE A4988  //      e
+#elif SapphirePlusVariant == 7 //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define Z2_DRIVER_TYPE TMC2208 //      
+  #else
+    #define Z2_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#endif //      e
+ 
+#if SapphirePlusVariant == 1 or SapphirePlusVariant == 2  //      e
+  #define E0_DRIVER_TYPE A4988 //      e
+#elif SapphirePlusVariant == 3 or SapphirePlusVariant == 4 or SapphirePlusVariant == 44 or SapphirePlusVariant == 5 or SapphirePlusVariant == 6  //      e
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define E0_DRIVER_TYPE TMC2208 //      
+  #else
+    #define E0_DRIVER_TYPE TMC2208_STANDALONE //      e
+  #endif
+#endif //      e
+
+ 
+
+#if ENABLED  (ALL2209)
+  #undef  X_DRIVER_TYPE
+  #undef  Y_DRIVER_TYPE
+  #undef  Z_DRIVER_TYPE
+  #undef Z2_DRIVER_TYPE
+  #undef E0_DRIVER_TYPE
+  #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+    #define  X_DRIVER_TYPE TMC2209 //      
+    #define  Y_DRIVER_TYPE TMC2209 //      
+    #define  Z_DRIVER_TYPE TMC2209 //      
+    #define Z2_DRIVER_TYPE TMC2209 //      
+    #define E0_DRIVER_TYPE TMC2209 //      
+  #else
+    #define  X_DRIVER_TYPE TMC2209_STANDALONE //      e
+    #define  Y_DRIVER_TYPE TMC2209_STANDALONE //      e
+    #define  Z_DRIVER_TYPE TMC2209_STANDALONE //      e
+    #define Z2_DRIVER_TYPE TMC2209_STANDALONE //      e
+    #define E0_DRIVER_TYPE TMC2209_STANDALONE //      e
+  #endif
+#endif
+
+#if ENABLED(SAPPHIRE_PLUS_TMC_UART)
+  #define TMC_BAUD_RATE                     19200 // Reduced to improve software serial reliability
+  #if DISABLED (SAPPHIRE_PLUS_TMC_UART_DIRECT)
+    #define X_SERIAL_TX_PIN                   PA10   // Wifi TX
+    #define X_SERIAL_RX_PIN                   PA10
+    #define Y_SERIAL_TX_PIN                   PA10  // Wifi RX
+    #define Y_SERIAL_RX_PIN                   PA10
+    #define Z_SERIAL_TX_PIN                   PA10  // WIFI IO0
+    #define Z_SERIAL_RX_PIN                   PA10
+    #define Z2_SERIAL_TX_PIN                  PA10  // WIFI IO1
+    #define Z2_SERIAL_RX_PIN                  PA10  // WIFI IO1
+    #define E0_SERIAL_TX_PIN                  PA9   // MAX31855 CS
+    #define E0_SERIAL_RX_PIN                  PA9
+    //#define E1_SERIAL_TX_PIN                  PA10  // WIFI IO1
+    //#define E1_SERIAL_RX_PIN                  PA10  // WIFI IO1
+    
+ #else
+    #define X_SERIAL_TX_PIN                   PA9   // Wifi TX
+    #define X_SERIAL_RX_PIN                   PA9
+    #define Y_SERIAL_TX_PIN                   PA10  // Wifi RX
+    #define Y_SERIAL_RX_PIN                   PA10
+    #define Z_SERIAL_TX_PIN                   PC13  // WIFI IO0
+    #define Z_SERIAL_RX_PIN                   PC13
+    #define Z2_SERIAL_TX_PIN                  PC7   // WIFI IO1
+    #define Z2_SERIAL_RX_PIN                  PC7   // WIFI IO1
+    #define E0_SERIAL_TX_PIN                  PE5   // MAX31855 CS
+    #define E0_SERIAL_RX_PIN                  PE5
+    //#define E1_SERIAL_TX_PIN                  PC7   // MAX31855 CS
+    //#define E1_SERIAL_RX_PIN                  PC7
+    
+  #endif
+#endif
 
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
-//#define ENDSTOP_INTERRUPTS_FEATURE
+#define ENDSTOP_INTERRUPTS_FEATURE
 
 /**
  * Endstop Noise Threshold
@@ -899,6 +1136,7 @@
  */
 //#define ENDSTOP_NOISE_THRESHOLD 2
 
+////da verificare /////////////
 // Check for stuck or disconnected endstops during homing moves.
 //#define DETECT_BROKEN_ENDSTOP
 
@@ -927,16 +1165,20 @@
  * Override with M92
  *                                      X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 500 }
-
+#if SapphirePlusVariant == 44
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 160, 160, 800, 830 }
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 415 }
+#endif
+////////////////////#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 1600, 415 }
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 2000, 2000, 800, 1000 } //      e
 
-//#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
+#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
   #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10, 50 } // ...or, set your own edit limits
 #endif
@@ -947,9 +1189,9 @@
  * Override with M201
  *                                      X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 1500 } //      
 
-//#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
+#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
   #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200, 20000 } // ...or, set your own edit limits
 #endif
@@ -962,9 +1204,16 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration for travel (non printing) moves
+
+#if SapphirePlusVariant == 44
+  #define DEFAULT_ACCELERATION          400    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_RETRACT_ACCELERATION  400    // E acceleration for retracts
+  #define DEFAULT_TRAVEL_ACCELERATION   400    // X, Y, Z acceleration for travel (non printing) moves
+#else
+  #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
+  #define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z acceleration for travel (non printing) moves
+#endif
 
 /**
  * Default Jerk limits (mm/s)
@@ -974,11 +1223,13 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
-//#define CLASSIC_JERK
+
+// da verificare ////////////////////////////
+#define CLASSIC_JERK 
 #if ENABLED(CLASSIC_JERK)
-  #define DEFAULT_XJERK 10.0
-  #define DEFAULT_YJERK 10.0
-  #define DEFAULT_ZJERK  0.3
+  #define DEFAULT_XJERK 5.0
+  #define DEFAULT_YJERK 5.0
+  #define DEFAULT_ZJERK 0.4
   //#define DEFAULT_IJERK  0.3
   //#define DEFAULT_JJERK  0.3
   //#define DEFAULT_KJERK  0.3
@@ -1014,7 +1265,7 @@
  *
  * See https://github.com/synthetos/TinyG/wiki/Jerk-Controlled-Motion-Explained
  */
-//#define S_CURVE_ACCELERATION
+#define S_CURVE_ACCELERATION
 
 //===========================================================================
 //============================= Z Probe Options =============================
@@ -1030,8 +1281,11 @@
  * The probe replaces the Z-MIN endstop and is used for Z homing.
  * (Automatically enables USE_PROBE_FOR_Z_HOMING.)
  */
-#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
-
+///(((((((((((((((((((((())))))))))))))))))))))
+#if ENABLED (SAPPHIRE_PLUS_BLTOUCH)
+  #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+  #define USE_PROBE_FOR_Z_HOMING
+#endif
 // Force the use of the probe for Z-axis homing
 //#define USE_PROBE_FOR_Z_HOMING
 
@@ -1050,7 +1304,8 @@
  *      - normally-closed switches to GND and D32.
  *      - normally-open switches to 5V and D32.
  */
-//#define Z_MIN_PROBE_PIN 32 // Pin 32 is the RAMPS default
+///////////////////////////////////////////////////////////////
+//#define Z_MIN_PROBE_PIN PE6 // Pin 32 is the RAMPS default
 
 /**
  * Probe Type
@@ -1064,7 +1319,13 @@
  * Use G29 repeatedly, adjusting the Z height at each point with movement commands
  * or (with LCD_BED_LEVELING) the LCD controller.
  */
-//#define PROBE_MANUALLY
+#if ENABLED(SAPPHIRE_PLUS_BLTOUCH)
+  //#define PROBE_MANUALLY
+  //#define MANUAL_PROBE_START_Z 0.2
+#else
+  #define PROBE_MANUALLY
+  #define MANUAL_PROBE_START_Z 0.2
+#endif
 
 /**
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
@@ -1087,7 +1348,10 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
-//#define BLTOUCH
+#if ENABLED(SAPPHIRE_PLUS_BLTOUCH)
+  #define BLTOUCH
+#endif
+
 
 /**
  * Touch-MI Probe by hotends.fr
@@ -1179,20 +1443,36 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
+#if ENABLED(SAPPHIRE_PLUS_BLTOUCH)
+  // https://www.thingiverse.com/thing:4361883
+  #define NOZZLE_TO_PROBE_OFFSET { probe_x, probe_y, probe_z }
+   //#define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0 }
+#else
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 0, 0 }
+#endif
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define PROBING_MARGIN 10
+#define PROBING_MARGIN 20
 
 // X and Y axis travel speed (mm/min) between probes
-#define XY_PROBE_FEEDRATE (133*60)
+
+#if SapphirePlusVariant == 44
+  #define XY_PROBE_FEEDRATE (60*60)
+#else
+  #define XY_PROBE_FEEDRATE (133*60)
+#endif
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_FEEDRATE_FAST (4*60)
+
+#if SapphirePlusVariant == 44
+  #define Z_PROBE_FEEDRATE_FAST (2*60)
+#else
+  #define Z_PROBE_FEEDRATE_FAST (4*60)
+#endif
 
 // Feedrate (mm/min) for the "accurate" probe of each point
-#define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2)
+#define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 4)
 
 /**
  * Probe Activation Switch
@@ -1239,7 +1519,8 @@
  * A total of 2 does fast/slow probes with a weighted average.
  * A total of 3 or more adds more slow probes, taking the average.
  */
-//#define MULTIPLE_PROBING 2
+ /////////////////////////////////////////
+/////#define MULTIPLE_PROBING 3
 //#define EXTRA_PROBING    1
 
 /**
@@ -1268,7 +1549,9 @@
 #define Z_PROBE_OFFSET_RANGE_MAX 20
 
 // Enable the M48 repeatability test to test probe accuracy
-//#define Z_MIN_PROBE_REPEATABILITY_TEST
+#if ENABLED(SAPPHIRE_PLUS_BLTOUCH)
+  #define Z_MIN_PROBE_REPEATABILITY_TEST
+#endif
 
 // Before deploy/stow pause for user confirmation
 //#define PAUSE_BEFORE_DEPLOY_STOW
@@ -1330,17 +1613,23 @@
 // @section machine
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
-#define INVERT_X_DIR false
-#define INVERT_Y_DIR true
-#define INVERT_Z_DIR false
-//#define INVERT_I_DIR false
-//#define INVERT_J_DIR false
-//#define INVERT_K_DIR false
-
+#define INVERT_X_DIR true  //      e
+#define INVERT_Y_DIR true  //      e
+#if SapphirePlusVariant == 1 or SapphirePlusVariant == 6 //      e
+  #define INVERT_Z_DIR false //      e
+#elif SapphirePlusVariant == 2 or SapphirePlusVariant == 3 or SapphirePlusVariant == 4 or SapphirePlusVariant == 44 or SapphirePlusVariant == 5 or SapphirePlusVariant == 7  //      e
+  #define INVERT_Z_DIR true //      e
+  #define INVERT_Z2_DIR true //added, since Z2 is not listed
+#endif
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR false
+#if SapphirePlusVariant == 1 or SapphirePlusVariant == 2 //      e
+  #define INVERT_E0_DIR false //      e
+#elif SapphirePlusVariant == 3 or SapphirePlusVariant == 4 or SapphirePlusVariant == 44 or SapphirePlusVariant == 5 or SapphirePlusVariant == 6 or SapphirePlusVariant == 7  //      e
+  #define INVERT_E0_DIR true //      e
+#endif //      e
+
 #define INVERT_E1_DIR false
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
@@ -1350,9 +1639,10 @@
 #define INVERT_E7_DIR false
 
 // @section homing
-
+///////////////////////////////////////////
 //#define NO_MOTION_BEFORE_HOMING // Inhibit movement until all axes have been homed. Also enable HOME_AFTER_DEACTIVATE for extra safety.
 //#define HOME_AFTER_DEACTIVATE   // Require rehoming after steppers are deactivated. Also enable NO_MOTION_BEFORE_HOMING for extra safety.
+////////////////////////////////////////////
 
 /**
  * Set Z_IDLE_HEIGHT if the Z-Axis moves on its own when steppers are disabled.
@@ -1361,15 +1651,16 @@
  */
 //#define Z_IDLE_HEIGHT Z_HOME_POS
 
+////////////////////////////////////////////
 //#define Z_HOMING_HEIGHT  4      // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                   // Be sure to have this much clearance over your Z_MAX_POS to prevent grinding.
-
+/////////////////////////////////////
 //#define Z_AFTER_HOMING  10      // (mm) Height to move to after homing Z
 
 // Direction of endstops when homing; 1=MAX, -1=MIN
 // :[-1,1]
 #define X_HOME_DIR -1
-#define Y_HOME_DIR -1
+#define Y_HOME_DIR 1
 #define Z_HOME_DIR -1
 //#define I_HOME_DIR -1
 //#define J_HOME_DIR -1
@@ -1377,17 +1668,29 @@
 
 // @section machine
 
-// The size of the printable area
-#define X_BED_SIZE 200
-#define Y_BED_SIZE 200
+// The size of the print bed
+#if DISABLED (SAPPHIRE_PRO)
+  #define X_BED_SIZE 305
+  #define Y_BED_SIZE 305
+#else
+  #define X_BED_SIZE 225
+  #define Y_BED_SIZE 225
+#endif
+//When adjust, adjust tramming too
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
-#define Y_MIN_POS 0
+#define Y_MIN_POS 0     // setting don't work
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 200
+
+#if ENABLED (SAPPHIRE_PRO)
+  #define Z_MAX_POS TERN(SAPPHIRE_PLUS_BLTOUCH, 230, 235) // BLTouch needs clearance for homing
+#else
+  #define Z_MAX_POS TERN(SAPPHIRE_PLUS_BLTOUCH, 335, 340) // BLTouch needs clearance for homing
+#endif
+///////////#define Z_MAX_POS TERN(SAPPHIRE_PLUS_BLTOUCH, 335, 340) // BLTouch needs clearance for homing
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
@@ -1427,7 +1730,7 @@
 #endif
 
 #if EITHER(MIN_SOFTWARE_ENDSTOPS, MAX_SOFTWARE_ENDSTOPS)
-  //#define SOFT_ENDSTOPS_MENU_ITEM  // Enable/Disable software endstops from the LCD
+  #define SOFT_ENDSTOPS_MENU_ITEM  // Enable/Disable software endstops from the LCD
 #endif
 
 /**
@@ -1443,11 +1746,16 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-//#define FILAMENT_RUNOUT_SENSOR
+ //////////////////////////////////////////////////////////////////////////////////
+/////////////////#define FILAMENT_RUNOUT_SENSOR
+#if ENABLED(SAPPHIRE_PLUS_RUNOUT)
+  #define FILAMENT_RUNOUT_SENSOR
+#endif
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
   #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
-
+////////////////////////////////////////////////////
+  #define FIL_RUNOUT_PIN PA4
   #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
   #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
   //#define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
@@ -1495,13 +1803,20 @@
   // After a runout is detected, continue printing this length of filament
   // before executing the runout script. Useful for a sensor at the end of
   // a feed tube. Requires 4 bytes SRAM per sensor, plus 4 bytes overhead.
-  //#define FILAMENT_RUNOUT_DISTANCE_MM 25
+  //###################################################################
+  //enable both if use smart filament sensor!
+  ///////////////////////////////////////////
+#if ENABLED(SAPPHIRE_PLUS_SMART_RUNOUT)
+  #define FILAMENT_RUNOUT_DISTANCE_MM 7
+#endif
+  //#define FILAMENT_RUNOUT_DISTANCE_MM 7
 
   #ifdef FILAMENT_RUNOUT_DISTANCE_MM
     // Enable this option to use an encoder disc that toggles the runout pin
     // as the filament moves. (Be sure to set FILAMENT_RUNOUT_DISTANCE_MM
     // large enough to avoid false positives.)
-    //#define FILAMENT_MOTION_SENSOR
+//////////////////// smart filamet sensor //////////////////
+    #define FILAMENT_MOTION_SENSOR
   #endif
 #endif
 
@@ -1545,7 +1860,11 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-//#define AUTO_BED_LEVELING_BILINEAR
+#if ENABLED(SAPPHIRE_PLUS_BLTOUCH)
+  #define AUTO_BED_LEVELING_BILINEAR
+#else
+  #define MESH_BED_LEVELING
+#endif
 //#define AUTO_BED_LEVELING_UBL
 //#define MESH_BED_LEVELING
 
@@ -1554,16 +1873,16 @@
  * these options to restore the prior leveling state or to always enable
  * leveling immediately after G28.
  */
-//#define RESTORE_LEVELING_AFTER_G28
-//#define ENABLE_LEVELING_AFTER_G28
+#define RESTORE_LEVELING_AFTER_G28
+ 
 
 /**
  * Auto-leveling needs preheating
  */
 //#define PREHEAT_BEFORE_LEVELING
 #if ENABLED(PREHEAT_BEFORE_LEVELING)
-  #define LEVELING_NOZZLE_TEMP 120   // (°C) Only applies to E0 at this time
-  #define LEVELING_BED_TEMP     50
+  #define LEVELING_NOZZLE_TEMP 220  // (°C) Only applies to E0 at this time
+  #define LEVELING_BED_TEMP     60
 #endif
 
 /**
@@ -1612,7 +1931,8 @@
 #if EITHER(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
-  #define GRID_MAX_POINTS_X 3
+  ////////////////////////////////////
+  #define GRID_MAX_POINTS_X GRIDMAX_POINTS
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   // Probe along the Y axis, advancing X after each column
@@ -1622,13 +1942,13 @@
 
     // Beyond the probed grid, continue the implied tilt?
     // Default is to maintain the height of the nearest edge.
-    //#define EXTRAPOLATE_BEYOND_GRID
+//    #define EXTRAPOLATE_BEYOND_GRID
 
     //
     // Experimental Subdivision of the grid by Catmull-Rom method.
     // Synthesizes intermediate points to produce a more detailed mesh.
     //
-    //#define ABL_BILINEAR_SUBDIVISION
+//    #define ABL_BILINEAR_SUBDIVISION
     #if ENABLED(ABL_BILINEAR_SUBDIVISION)
       // Number of subdivisions between probe points
       #define BILINEAR_SUBDIVISIONS 3
@@ -1665,7 +1985,7 @@
   //===========================================================================
 
   #define MESH_INSET 10          // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 3    // Don't use more than 7 points per axis, implementation limited.
+  #define GRID_MAX_POINTS_X GRIDMAX_POINTS    // Don't use more than 7 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   //#define MESH_G28_REST_ORIGIN // After homing all axes ('G28' or 'G28 XYZ') rest Z at Z_MIN_POS
@@ -1676,19 +1996,21 @@
  * Add a bed leveling sub-menu for ABL or MBL.
  * Include a guided procedure if manual probing is enabled.
  */
-//#define LCD_BED_LEVELING
+#if DISABLED(SAPPHIRE_PLUS_MKS_UI)
+  #define LCD_BED_LEVELING
+#endif
 
 #if ENABLED(LCD_BED_LEVELING)
   #define MESH_EDIT_Z_STEP  0.025 // (mm) Step size while manually probing Z axis.
   #define LCD_PROBE_Z_RANGE 4     // (mm) Z Range centered on Z_MIN_POS for LCD Z adjustment
-  //#define MESH_EDIT_MENU        // Add a menu to edit mesh points
+  #define MESH_EDIT_MENU        // Add a menu to edit mesh points
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
-//#define LEVEL_BED_CORNERS
+#define LEVEL_BED_CORNERS
 
 #if ENABLED(LEVEL_BED_CORNERS)
-  #define LEVEL_CORNERS_INSET_LFRB { 30, 30, 30, 30 } // (mm) Left, Front, Right, Back insets
+  #define LEVEL_CORNERS_INSET_LFRB { 35, 35, 35, 35 } // (mm) Left, Front, Right, Back insets
   #define LEVEL_CORNERS_HEIGHT      0.0   // (mm) Z height of nozzle at leveling points
   #define LEVEL_CORNERS_Z_HOP       4.0   // (mm) Z height of nozzle between leveling points
   //#define LEVEL_CENTER_TOO              // Move to the center after the last corner
@@ -1746,7 +2068,9 @@
  * - Allows Z homing only when XY positions are known and trusted.
  * - If stepper drivers sleep, XY homing may be required again before Z homing.
  */
-//#define Z_SAFE_HOMING
+#if ENABLED(SAPPHIRE_PLUS_BLTOUCH)
+  #define Z_SAFE_HOMING
+#endif
 
 #if ENABLED(Z_SAFE_HOMING)
   #define Z_SAFE_HOMING_X_POINT X_CENTER  // X point for Z homing
@@ -1754,7 +2078,12 @@
 #endif
 
 // Homing speeds (mm/min)
-#define HOMING_FEEDRATE_MM_M { (50*60), (50*60), (4*60) }
+#if SapphirePlusVariant == 44
+  #define HOMING_FEEDRATE_MM_M { (20*60), (20*60), (6*60) } //      e
+#else
+  #define HOMING_FEEDRATE_MM_M { (50*60), (50*60), (15*60) } //      e
+#endif
+
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS
@@ -1831,13 +2160,14 @@
  *   M501 - Read settings from EEPROM. (i.e., Throw away unsaved changes)
  *   M502 - Revert settings to "factory" defaults. (Follow with M500 to init the EEPROM.)
  */
-//#define EEPROM_SETTINGS     // Persistent storage with M500 and M501
+#define EEPROM_SETTINGS     // Persistent storage with M500 and M501
 //#define DISABLE_M503        // Saves ~2700 bytes of PROGMEM. Disable for release!
 #define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save PROGMEM.
-#define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
+//#define EEPROM_BOOT_SILENT    //      e Keep M503 quiet and only give errors during first load
 #if ENABLED(EEPROM_SETTINGS)
-  //#define EEPROM_AUTO_INIT  // Init EEPROM automatically on any errors.
-  //#define EEPROM_INIT_NOW   // Init EEPROM on first boot after a new build.
+ /////////// #if ENABLED(SAPPHIRE_PLUS_MKS_UI)
+    #define EEPROM_AUTO_INIT  // Init EEPROM automatically on any errors.
+ //////////////// #endif
 #endif
 
 //
@@ -1866,16 +2196,34 @@
 // Preheat Constants - Up to 5 are supported without changes
 //
 #define PREHEAT_1_LABEL       "PLA"
-#define PREHEAT_1_TEMP_HOTEND 180
-#define PREHEAT_1_TEMP_BED     70
+#define PREHEAT_1_TEMP_HOTEND 190 //      e
+#define PREHEAT_1_TEMP_BED     55
 #define PREHEAT_1_TEMP_CHAMBER 35
 #define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
 
-#define PREHEAT_2_LABEL       "ABS"
-#define PREHEAT_2_TEMP_HOTEND 240
-#define PREHEAT_2_TEMP_BED    110
+#define PREHEAT_2_LABEL       "PETG"
+#define PREHEAT_2_TEMP_HOTEND 230
+#define PREHEAT_2_TEMP_BED     70
 #define PREHEAT_2_TEMP_CHAMBER 35
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
+
+#define PREHEAT_3_LABEL       "ASA"
+#define PREHEAT_3_TEMP_HOTEND 255
+#define PREHEAT_3_TEMP_BED     95
+#define PREHEAT_3_TEMP_CHAMBER 35
+#define PREHEAT_3_FAN_SPEED     0 // Value from 0 to 255
+
+#define PREHEAT_4_LABEL       "TPU"
+#define PREHEAT_4_TEMP_HOTEND 240
+#define PREHEAT_4_TEMP_BED     85
+#define PREHEAT_4_TEMP_CHAMBER 35
+#define PREHEAT_4_FAN_SPEED     0 // Value from 0 to 255
+
+#define PREHEAT_5_LABEL       "ABS"
+#define PREHEAT_5_TEMP_HOTEND 240
+#define PREHEAT_5_TEMP_BED    110
+#define PREHEAT_5_TEMP_CHAMBER 35
+#define PREHEAT_5_FAN_SPEED     0 // Value from 0 to 255
 
 /**
  * Nozzle Park
@@ -1888,7 +2236,7 @@
  *    P1  Raise the nozzle always to Z-park height.
  *    P2  Raise the nozzle by Z-park amount, limited to Z_MAX_POS.
  */
-//#define NOZZLE_PARK_FEATURE
+#define NOZZLE_PARK_FEATURE
 
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z_raise }
@@ -1896,7 +2244,11 @@
   //#define NOZZLE_PARK_X_ONLY          // X move only is required to park
   //#define NOZZLE_PARK_Y_ONLY          // Y move only is required to park
   #define NOZZLE_PARK_Z_RAISE_MIN   2   // (mm) Always raise Z by at least this distance
-  #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
+  #if SapphirePlusVariant == 44
+     #define NOZZLE_PARK_XY_FEEDRATE 50   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
+  #else
+     #define NOZZLE_PARK_XY_FEEDRATE 100   // (mm/s) X and Y axes feedrate (also used for delta Z axis)
+  #endif
   #define NOZZLE_PARK_Z_FEEDRATE    5   // (mm/s) Z axis feedrate (not used for delta printers)
 #endif
 
@@ -2014,6 +2366,7 @@
  *
  * View the current statistics with M78.
  */
+ /////////////////////////////////////
 //#define PRINTCOUNTER
 #if ENABLED(PRINTCOUNTER)
   #define PRINTCOUNTER_SAVE_INTERVAL 60 // (minutes) EEPROM save interval during print
@@ -2066,7 +2419,11 @@
  *
  * :{ 'en':'English', 'an':'Aragonese', 'bg':'Bulgarian', 'ca':'Catalan', 'cz':'Czech', 'da':'Danish', 'de':'German', 'el':'Greek (Greece)', 'el_CY':'Greek (Cyprus)', 'es':'Spanish', 'eu':'Basque-Euskera', 'fi':'Finnish', 'fr':'French', 'gl':'Galician', 'hr':'Croatian', 'hu':'Hungarian', 'it':'Italian', 'jp_kana':'Japanese', 'ko_KR':'Korean (South Korea)', 'nl':'Dutch', 'pl':'Polish', 'pt':'Portuguese', 'pt_br':'Portuguese (Brazilian)', 'ro':'Romanian', 'ru':'Russian', 'sk':'Slovak', 'sv':'Swedish', 'tr':'Turkish', 'uk':'Ukrainian', 'vi':'Vietnamese', 'zh_CN':'Chinese (Simplified)', 'zh_TW':'Chinese (Traditional)' }
  */
-#define LCD_LANGUAGE en
+#if ENABLED (ITA_LANG)
+   #define LCD_LANGUAGE it
+#else
+  #define LCD_LANGUAGE en
+#endif
 
 /**
  * LCD Character Set
@@ -2090,7 +2447,7 @@
  *
  * :['JAPANESE', 'WESTERN', 'CYRILLIC']
  */
-#define DISPLAY_CHARSET_HD44780 JAPANESE
+#define DISPLAY_CHARSET_HD44780 WESTERN
 
 /**
  * Info Screen Style (0:Classic, 1:Průša)
@@ -2105,14 +2462,15 @@
  * SD Card support is disabled by default. If your controller has an SD slot,
  * you must uncomment the following option or it won't work.
  */
-//#define SDSUPPORT
+#define SDSUPPORT
 
 /**
  * SD CARD: ENABLE CRC
  *
  * Use CRC checks and retries on the SD communication.
  */
-//#define SD_CHECK_AND_RETRY
+//////////////////////////////////////7
+#define SD_CHECK_AND_RETRY
 
 /**
  * LCD Menu Items
@@ -2175,8 +2533,10 @@
 //
 // Add individual axis homing items (Home X, Home Y, and Home Z) to the LCD menu.
 //
-//#define INDIVIDUAL_AXIS_HOMING_MENU
-//#define INDIVIDUAL_AXIS_HOMING_SUBMENU
+#define INDIVIDUAL_AXIS_HOMING_MENU
+
+///////////////////////////////////
+#define INDIVIDUAL_AXIS_HOMING_SUBMENU
 
 //
 // SPEAKER/BUZZER
@@ -2184,7 +2544,7 @@
 // If you have a speaker that can produce tones, enable it here.
 // By default Marlin assumes you have a buzzer with a fixed frequency.
 //
-//#define SPEAKER
+#define SPEAKER
 
 //
 // The duration and frequency for the UI feedback sound.
@@ -2684,7 +3044,7 @@
 // 480x320, 3.5", FSMC Display From MKS
 // Usually paired with MKS Robin Nano V1.2
 //
-//#define MKS_ROBIN_TFT35
+#define MKS_ROBIN_TFT35
 
 //
 // 480x272, 4.3", FSMC Display From MKS
@@ -2735,19 +3095,19 @@
 //
 // Generic TFT with detailed options
 //
-//#define TFT_GENERIC
+//#define TFT_GENERIC /////////////////////////////7
 #if ENABLED(TFT_GENERIC)
   // :[ 'AUTO', 'ST7735', 'ST7789', 'ST7796', 'R61505', 'ILI9328', 'ILI9341', 'ILI9488' ]
   #define TFT_DRIVER AUTO
 
   // Interface. Enable one of the following options:
-  //#define TFT_INTERFACE_FSMC
+  #define TFT_INTERFACE_FSMC
   //#define TFT_INTERFACE_SPI
 
   // TFT Resolution. Enable one of the following options:
   //#define TFT_RES_320x240
   //#define TFT_RES_480x272
-  //#define TFT_RES_480x320
+  #define TFT_RES_480x320
   //#define TFT_RES_1024x600
 #endif
 
@@ -2762,11 +3122,19 @@
  *   root of your SD card, together with the compiled firmware.
  */
 //#define TFT_CLASSIC_UI
-//#define TFT_COLOR_UI
-//#define TFT_LVGL_UI
+#if DISABLED(SAPPHIRE_PLUS_MKS_UI)
+  #define TFT_COLOR_UI
+#else
+  #define TFT_LVGL_UI
+#endif
 
-#if ENABLED(TFT_LVGL_UI)
-  //#define MKS_WIFI_MODULE  // MKS WiFi module
+
+#if ENABLED (TFT_LVGL_UI)
+  #if DISABLED (SAPPHIRE_PLUS_TMC_UART)
+    #if ENABLED (SAPPHIRE_PLUS_HAS_WIFI)
+      #define MKS_WIFI_MODULE  // MKS WiFi module
+	#endif
+  #endif
 #endif
 
 /**
@@ -2777,7 +3145,11 @@
  *   TFT_ROTATE_270, TFT_ROTATE_270_MIRROR_X, TFT_ROTATE_270_MIRROR_Y,
  *   TFT_MIRROR_X, TFT_MIRROR_Y, TFT_NO_ROTATION
  */
-//#define TFT_ROTATION TFT_NO_ROTATION
+#if ENABLED (Rotated_Screen)
+  #define TFT_ROTATION TFT_ROTATE_180
+#else
+  #define TFT_ROTATION TFT_NO_ROTATION
+#endif
 
 //=============================================================================
 //============================  Other Controllers  ============================
@@ -2795,7 +3167,12 @@
 //
 // Touch Screen Settings
 //
-//#define TOUCH_SCREEN
+///da verificare!!!/////////////////
+//#if DISABLED(SAPPHIRE_PLUS_MKS_UI)
+#define TOUCH_SCREEN
+//#endif
+ //#define TOUCH_SCREEN_CALIBRATION
+
 #if ENABLED(TOUCH_SCREEN)
   #define BUTTON_DELAY_EDIT  50 // (ms) Button repeat delay for edit screens
   #define BUTTON_DELAY_MENU 250 // (ms) Button repeat delay for menus
@@ -2804,10 +3181,10 @@
 
   #define TOUCH_SCREEN_CALIBRATION
 
-  //#define TOUCH_CALIBRATION_X 12316
-  //#define TOUCH_CALIBRATION_Y -8981
-  //#define TOUCH_OFFSET_X        -43
-  //#define TOUCH_OFFSET_Y        257
+  //#define TOUCH_CALIBRATION_X 17264
+  //#define TOUCH_CALIBRATION_Y -11677
+  //#define TOUCH_OFFSET_X        -30
+  //#define TOUCH_OFFSET_Y        349
   //#define TOUCH_ORIENTATION TOUCH_LANDSCAPE
 
   #if BOTH(TOUCH_SCREEN_CALIBRATION, EEPROM_SETTINGS)
@@ -2815,7 +3192,7 @@
   #endif
 
   #if ENABLED(TFT_COLOR_UI)
-    //#define SINGLE_TOUCH_NAVIGATION
+    #define SINGLE_TOUCH_NAVIGATION
   #endif
 #endif
 
@@ -2908,34 +3285,36 @@
 #endif
 
 // Support for Adafruit NeoPixel LED driver
-//#define NEOPIXEL_LED
-#if ENABLED(NEOPIXEL_LED)
-  #define NEOPIXEL_TYPE   NEO_GRBW // NEO_GRBW / NEO_GRB - four/three channel driver type (defined in Adafruit_NeoPixel.h)
-  //#define NEOPIXEL_PIN     4     // LED driving pin
-  //#define NEOPIXEL2_TYPE NEOPIXEL_TYPE
-  //#define NEOPIXEL2_PIN    5
-  #define NEOPIXEL_PIXELS 30       // Number of LEDs in the strip. (Longest strip when NEOPIXEL2_SEPARATE is disabled.)
-  #define NEOPIXEL_IS_SEQUENTIAL   // Sequential display for temperature change - LED by LED. Disable to change all LEDs at once.
-  #define NEOPIXEL_BRIGHTNESS 127  // Initial brightness (0-255)
-  //#define NEOPIXEL_STARTUP_TEST  // Cycle through colors at startup
+#if ENABLED (SAPPHIRE_PLUS_NEOPIXEL)
+  #define NEOPIXEL_LED
+  #if ENABLED(NEOPIXEL_LED)
+    #define NEOPIXEL_TYPE   NEO_GRB // NEO_GRBW / NEO_GRB - four/three channel driver type (defined in Adafruit_NeoPixel.h)
+    ///////////////////////////////
+	  #define NEOPIXEL_PIN     PC7       // LED driving pin
+    //#define NEOPIXEL2_TYPE NEOPIXEL_TYPE
+    //#define NEOPIXEL2_PIN    5
+    #define NEOPIXEL_PIXELS 30       // Number of LEDs in the strip. (Longest strip when NEOPIXEL2_SEPARATE is disabled.)
+    //#define NEOPIXEL_IS_SEQUENTIAL   // Sequential display for temperature change - LED by LED. Disable to change all LEDs at once.
+    #define NEOPIXEL_BRIGHTNESS 127  // Initial brightness (0-255)
+    #define NEOPIXEL_STARTUP_TEST  // Cycle through colors at startup
 
-  // Support for second Adafruit NeoPixel LED driver controlled with M150 S1 ...
-  //#define NEOPIXEL2_SEPARATE
-  #if ENABLED(NEOPIXEL2_SEPARATE)
-    #define NEOPIXEL2_PIXELS      15  // Number of LEDs in the second strip
-    #define NEOPIXEL2_BRIGHTNESS 127  // Initial brightness (0-255)
-    #define NEOPIXEL2_STARTUP_TEST    // Cycle through colors at startup
-  #else
-    //#define NEOPIXEL2_INSERIES      // Default behavior is NeoPixel 2 in parallel
+    // Support for second Adafruit NeoPixel LED driver controlled with M150 S1 ...
+    //#define NEOPIXEL2_SEPARATE
+    #if ENABLED(NEOPIXEL2_SEPARATE)
+      #define NEOPIXEL2_PIXELS      15  // Number of LEDs in the second strip
+      #define NEOPIXEL2_BRIGHTNESS 127  // Initial brightness (0-255)
+      #define NEOPIXEL2_STARTUP_TEST    // Cycle through colors at startup
+    #else
+      //#define NEOPIXEL2_INSERIES      // Default behavior is NeoPixel 2 in parallel
+    #endif
+
+    // Use some of the NeoPixel LEDs for static (background) lighting
+    //#define NEOPIXEL_BKGD_INDEX_FIRST  0              // Index of the first background LED
+    //#define NEOPIXEL_BKGD_INDEX_LAST   5              // Index of the last background LED
+    //#define NEOPIXEL_BKGD_COLOR { 255, 255, 255, 0 }  // R, G, B, W
+    //#define NEOPIXEL_BKGD_ALWAYS_ON                   // Keep the backlight on when other NeoPixels are off
   #endif
-
-  // Use some of the NeoPixel LEDs for static (background) lighting
-  //#define NEOPIXEL_BKGD_INDEX_FIRST  0              // Index of the first background LED
-  //#define NEOPIXEL_BKGD_INDEX_LAST   5              // Index of the last background LED
-  //#define NEOPIXEL_BKGD_COLOR { 255, 255, 255, 0 }  // R, G, B, W
-  //#define NEOPIXEL_BKGD_ALWAYS_ON                   // Keep the backlight on when other NeoPixels are off
 #endif
-
 /**
  * Printer Event LEDs
  *
@@ -2958,7 +3337,7 @@
  * Set this manually if there are extra servos needing manual control.
  * Set to 0 to turn off servo support.
  */
-//#define NUM_SERVOS 3 // Note: Servo index starts with 0 for M280-M282 commands
+#define NUM_SERVOS 1 // Note: Servo index starts with 0 for M280-M282 commands
 
 // (ms) Delay before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
