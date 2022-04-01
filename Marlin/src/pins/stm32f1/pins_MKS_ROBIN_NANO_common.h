@@ -96,9 +96,14 @@
 
 //
 // Heaters / Fans
-//
+////////////////////////////////////////////////////////////////////////////////
 #ifndef HEATER_0_PIN
-  #define HEATER_0_PIN                      PC3
+  #if ENABLED (HE1ASHE0)
+    #define HEATER_0_PIN                      PB0
+  #else
+    #define HEATER_0_PIN                      PC3
+  #endif
+  
 #endif
 #ifndef FAN_PIN
   #define FAN_PIN                           PB1   // FAN
@@ -109,7 +114,11 @@
 
 #if HOTENDS == 1 && DISABLED(HEATERS_PARALLEL)
   #ifndef FAN1_PIN
-    #define FAN1_PIN                        PB0
+    #if ENABLED (HE1ASHE0)
+          //#define FAN1_PIN                        PB0
+    #else
+          #define FAN1_PIN                        PB0
+    #endif
   #endif
 #elif !defined(HEATER_1_PIN)
   #define HEATER_1_PIN                      PB0
