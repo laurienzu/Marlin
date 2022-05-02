@@ -1845,12 +1845,12 @@
 // Specify additional languages for the UI. Default specified by LCD_LANGUAGE.
 //
 #if ANY(DOGLCD, TFT_COLOR_UI, TOUCH_UI_FTDI_EVE, IS_DWIN_MARLINUI)
-  #define LCD_LANGUAGE_2 it
-  #define LCD_LANGUAGE_3 de
-  #define LCD_LANGUAGE_4 es
-  #define LCD_LANGUAGE_5 fr
+//  #define LCD_LANGUAGE_2 it
+//  #define LCD_LANGUAGE_3 de
+//  #define LCD_LANGUAGE_4 es
+//  #define LCD_LANGUAGE_5 fr
   #ifdef LCD_LANGUAGE_2
-    #define LCD_LANGUAGE_AUTO_SAVE // Automatically save language to EEPROM on change
+  //  #define LCD_LANGUAGE_AUTO_SAVE // Automatically save language to EEPROM on change
   #endif
 #endif
 
@@ -2034,10 +2034,13 @@
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
  /////////////////////////////////////////////
+ #if ENABLED (LINEAR_ADVANCE)
+  #define LIN_ADVANCE
+ #endif
 //#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
-  #define LIN_ADVANCE_K 0.10    // Unit: mm compression per 1mm/s extruder speed
+  #define LIN_ADVANCE_K K_VALUE /////0.10    // Unit: mm compression per 1mm/s extruder speed
   //#define LA_DEBUG            // If enabled, this will generate debug information output over USB.
   //#define EXPERIMENTAL_SCURVE // Enable this option to permit S-Curve Acceleration
   #define ALLOW_LOW_EJERK     // Allow a DEFAULT_EJERK value of <10. Recommended for direct drive hotends.
@@ -4179,7 +4182,10 @@
  * Adds capability to work with any adjustable current drivers.
  * Implemented as G34 because M915 is deprecated.
  */
-//#define MECHANICAL_GANTRY_CALIBRATION
+#if ENABLED (SEPARATED_Z_MOTORS)
+  #define MECHANICAL_GANTRY_CALIBRATION
+#endif
+
 #if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
   #define GANTRY_CALIBRATION_CURRENT          600     // Default calibration current in ma
   #define GANTRY_CALIBRATION_EXTRA_HEIGHT      15     // Extra distance in mm past Z_###_POS to move

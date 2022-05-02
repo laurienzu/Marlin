@@ -43,12 +43,10 @@
  
  */
 
-#define SapphirePlusVariant 44 //
+#define SapphirePlusVariant 8 //
 
-//#define ITA_LANG  //italiano se abilitato , altrimenti inglese
-
-//#define HE1ASHE0 // per chi brucia mosfet hotend, montiamo sull'altro emulando HE0!!!
-
+#define ITA_LANG  //italiano se abilitato , altrimenti inglese
+ 
 #define SAPPHIRE_PLUS
 
 #if DISABLED (SAPPHIRE_PLUS)
@@ -58,27 +56,36 @@
 #define Rotated_Screen //to rotate screen of 180 degrees if all shown upset! on TFT
 
 
-#define MOTHERBOARD BOARD_MKS_ROBIN_NANO   //BOARD_MKS_ROBIN_NANO_V1_3_F4  //     SCHEDA HSRDWARE, potrebbe essere: BOARD_MKS_ROBIN_NANO_V2 per le ultime PLUS....
-//#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V1_3_F4
+//#define MOTHERBOARD BOARD_MKS_ROBIN_NANO   //BOARD_MKS_ROBIN_NANO_V1_3_F4  //     SCHEDA HSRDWARE, potrebbe essere: BOARD_MKS_ROBIN_NANO_V2 per le ultime PLUS....
+#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V1_3_F4
 
 //#define SAPPHIRE_PLUS_MKS_UI              // UI Grafica classica di TwoTrees
-
+ 
 #define GRIDMAX_POINTS 5  //3,5,7,8,9..... points to test with mesh or bltouch, 5= 5x5, so 25 probe points
 
 #define SAPPHIRE_PLUS_BLTOUCH             // Sensore di livellamento su Z endstop
+
+#define LINEAR_ADVANCE
+#if ENABLED (LINEAR_ADVANCE)
+  #define K_VALUE 0.10
+#endif
 
 #if ENABLED (SAPPHIRE_PLUS_BLTOUCH)
   #define probe_x 0.0    //probe point of X respect to bltouch mount
   #define probe_y 29.5   //probe point of Y respect to bltouch mount
   #define probe_z 0.0    //probe point of Z respect to bltouch mount, usually 0
+
+  //#define SEPARATED_Z_MOTORS /// to enable bltouch probe for non synched Plus Z step motors
+
 #endif
 
-//#define SAPPHIRE_PLUS_AUTOFAN             // accende e spegne ventola sopra i 50 gradi (SU "Hot-End-1 pinout" PIN: PB0 )
+//#define HE1ASHE0 // per chi brucia mosfet hotend, montiamo sull'altro emulando HE0!!!
+#define SAPPHIRE_PLUS_AUTOFAN             // accende e spegne ventola sopra i 50 gradi (SU "Hot-End-1 pinout" PIN: PB0 )
                                           // altrimenti le ventole estrusore vanno bene sove sono (12/24v output)
                                           
-//#define SAPPHIRE_PLUS_DIRECTDRIVE         // Estrusore in Direct Mode (no browden)
+#define SAPPHIRE_PLUS_DIRECTDRIVE         // Estrusore in Direct Mode (no browden)
 
-//#define SAPPHIRE_PLUS_TMC_UART            // SU PIN PB10 (X,Y,Z,Z2) e PB9 (E0)
+#define SAPPHIRE_PLUS_TMC_UART            // SU PIN PB10 (X,Y,Z,Z2) e PB9 (E0)
 #if ENABLED(SAPPHIRE_PLUS_TMC_UART)
   //#define SAPPHIRE_PLUS_TMC_UART_DIRECT   // PIN Singolo per ogni DRIVER
   
@@ -95,6 +102,7 @@
      E0_SERIAL_RX_PIN                  PE5
    * 
    */
+  
 #else
   //#define SAPPHIRE_PLUS_HAS_WIFI          // ESP8266 per WIFI
 #endif
@@ -104,7 +112,7 @@
   //#define SAPPHIRE_PLUS_SMART_RUNOUT       // sensore di inceppamentoi filamento e filamento terminato
 #endif
 
-//#define SAPPHIRE_PLUS_NEOPIXEL             // su PIN PC7  (Striscia led indirizzabile RGB)
+#define SAPPHIRE_PLUS_NEOPIXEL             // su PIN PC7  (Striscia led indirizzabile RGB)
 //#define SAPPHIRE_PLUS_POWERLOSSRECOVERY   // su PIN PA2  /(Sistema di spegnimento su mncanza corrente elettrica e UPS)
 
 #define CUSTOM_MACHINE_NAME "TT SP-5" // nome da mostrare sullo schermo della stampante
@@ -1265,8 +1273,9 @@
  *
  * See https://github.com/synthetos/TinyG/wiki/Jerk-Controlled-Motion-Explained
  */
-#define S_CURVE_ACCELERATION
-
+#if DISABLED (LINEAR_ADVANCE)
+  #define S_CURVE_ACCELERATION
+#endif
 //===========================================================================
 //============================= Z Probe Options =============================
 //===========================================================================
